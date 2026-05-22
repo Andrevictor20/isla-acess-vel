@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
+import { AccessibilityWidget } from "@/components/AccessibilityWidget";
 
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";

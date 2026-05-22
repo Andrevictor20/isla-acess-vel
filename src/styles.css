@@ -145,3 +145,69 @@
 .leaflet-container {
   z-index: 0;
 }
+
+/* ===== Accessibility preferences (toggled via AccessibilityWidget) ===== */
+html {
+  --a11y-font-scale: 1;
+}
+html { font-size: calc(100% * var(--a11y-font-scale, 1)); }
+
+html.a11y-high-contrast {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0 0 0);
+  --surface: oklch(1 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.15 0 0);
+  --border: oklch(0 0 0);
+  --primary: oklch(0 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.25 0.18 250);
+  --secondary-foreground: oklch(1 0 0);
+  --accent: oklch(0.55 0.22 60);
+  --accent-foreground: oklch(0 0 0);
+  --ring: oklch(0.25 0.18 250);
+}
+html.a11y-high-contrast * { text-shadow: none !important; }
+html.a11y-high-contrast img,
+html.a11y-high-contrast video { filter: contrast(1.1); }
+
+html.a11y-underline-links a { text-decoration: underline !important; text-underline-offset: 3px; }
+
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+html.a11y-dyslexia,
+html.a11y-dyslexia body,
+html.a11y-dyslexia h1,
+html.a11y-dyslexia h2,
+html.a11y-dyslexia h3,
+html.a11y-dyslexia h4,
+html.a11y-dyslexia h5,
+html.a11y-dyslexia h6,
+html.a11y-dyslexia p,
+html.a11y-dyslexia li,
+html.a11y-dyslexia a,
+html.a11y-dyslexia button,
+html.a11y-dyslexia input,
+html.a11y-dyslexia textarea,
+html.a11y-dyslexia label {
+  font-family: Verdana, Tahoma, "Trebuchet MS", sans-serif !important;
+  letter-spacing: 0.02em;
+  word-spacing: 0.06em;
+  line-height: 1.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
