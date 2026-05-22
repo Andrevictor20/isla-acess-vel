@@ -65,6 +65,3 @@ function Index() {
     </div>
   );
 }
-    </div>
-  );
-}
