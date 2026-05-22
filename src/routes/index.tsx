@@ -60,7 +60,11 @@ function Index() {
       </main>
 
       <Footer />
+      <AccessibilityWidget />
       <Toaster richColors position="top-right" />
+    </div>
+  );
+}
     </div>
   );
 }
