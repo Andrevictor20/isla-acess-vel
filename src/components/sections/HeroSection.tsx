@@ -1,8 +1,15 @@
 import { motion } from "framer-motion";
-import { ArrowRight, MessageSquare } from "lucide-react";
+import { ArrowRight, MessageSquare, ShieldCheck, Award, Users2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SITE } from "@/lib/constants";
 import logo from "@/assets/isla-logo.jpg";
+
+const partners = [
+  { icon: ShieldCheck, label: "Selo de Transparência" },
+  { icon: Award, label: "Certificação OSCIP" },
+  { icon: Users2, label: "Rede de Inclusão MA" },
+  { icon: Sparkles, label: "Parceiros Locais" },
+];
 
 export function HeroSection() {
   const scrollTo = (id: string) => {
@@ -65,7 +72,27 @@ export function HeroSection() {
             </Button>
           </div>
 
-          <dl className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-border pt-6 text-left">
+          <div
+            className="mt-10 rounded-2xl border border-border/70 bg-background/60 px-5 py-4 backdrop-blur"
+            aria-label="Parceiros e Certificações"
+          >
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
+              Parceiros e Certificações
+            </p>
+            <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {partners.map((p) => (
+                <li
+                  key={p.label}
+                  className="flex items-center gap-2 text-xs font-semibold text-primary/80"
+                >
+                  <p.icon className="h-4 w-4 text-secondary" aria-hidden="true" />
+                  <span>{p.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <dl className="mt-10 grid max-w-md grid-cols-3 gap-6 border-t border-border pt-6 text-left">
             {[
               { k: "8+", v: "Anos" },
               { k: "1.2k+", v: "Atendidos" },
@@ -90,6 +117,9 @@ export function HeroSection() {
             <img
               src={logo}
               alt={`Logo do ${SITE.name} sobre azulejo maranhense`}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
               className="h-72 w-72 rounded-[1.5rem] object-cover sm:h-96 sm:w-96"
             />
           </div>

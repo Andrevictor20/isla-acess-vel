@@ -10,14 +10,17 @@ import {
   RotateCcw,
   Minus,
   Plus,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 type Prefs = {
-  fontScale: number; // 1, 1.15, 1.3, 1.5
+  fontScale: number;
   highContrast: boolean;
   underlineLinks: boolean;
   reduceMotion: boolean;
   dyslexiaFont: boolean;
+  ttsActive: boolean;
 };
 
 const DEFAULT: Prefs = {
@@ -26,6 +29,7 @@ const DEFAULT: Prefs = {
   underlineLinks: false,
   reduceMotion: false,
   dyslexiaFont: false,
+  ttsActive: false,
 };
 
 const STORAGE_KEY = "isla-a11y-prefs";
@@ -38,6 +42,21 @@ function applyPrefs(p: Prefs) {
   root.classList.toggle("a11y-underline-links", p.underlineLinks);
   root.classList.toggle("a11y-reduce-motion", p.reduceMotion);
   root.classList.toggle("a11y-dyslexia", p.dyslexiaFont);
+}
+
+function speak(text: string) {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = "pt-BR";
+  utt.rate = 0.9;
+  window.speechSynthesis.speak(utt);
+}
+
+function stopSpeaking() {
+  if (typeof window !== "undefined" && "speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
 }
 
 export function AccessibilityWidget() {
@@ -79,10 +98,38 @@ export function AccessibilityWidget() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // TTS hover handler
+  useEffect(() => {
+    if (!prefs.ttsActive) return;
+    let lastText = "";
+    const handler = (e: MouseEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (!el || !el.innerText) return;
+      const text = el.innerText.trim();
+      if (text.length > 1 && text.length < 500 && text !== lastText) {
+        lastText = text;
+        speak(text);
+      }
+    };
+    document.addEventListener("mouseover", handler);
+    return () => {
+      document.removeEventListener("mouseover", handler);
+      stopSpeaking();
+    };
+  }, [prefs.ttsActive]);
+
   const update = <K extends keyof Prefs>(k: K, v: Prefs[K]) =>
     setPrefs((p) => ({ ...p, [k]: v }));
 
-  const reset = () => setPrefs(DEFAULT);
+  const toggleTTS = (active: boolean) => {
+    update("ttsActive", active);
+    if (!active) stopSpeaking();
+  };
+
+  const reset = () => {
+    stopSpeaking();
+    setPrefs(DEFAULT);
+  };
 
   const fontSteps = [1, 1.15, 1.3, 1.5];
   const incFont = () => {
@@ -108,6 +155,21 @@ export function AccessibilityWidget() {
       >
         <Accessibility className="h-7 w-7" aria-hidden="true" />
       </button>
+
+      {prefs.ttsActive && (
+        <button
+          type="button"
+          onClick={() => {
+            const main = document.querySelector("main");
+            if (main) speak((main as HTMLElement).innerText);
+          }}
+          className="fixed bottom-5 left-24 z-[60] inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-bold text-white shadow-elegant"
+          aria-label="Ouvir conteúdo da página"
+        >
+          <Volume2 className="h-4 w-4" aria-hidden="true" />
+          Ouvir página
+        </button>
+      )}
 
       {open && (
         <div
@@ -189,6 +251,12 @@ export function AccessibilityWidget() {
               label="Fonte para dislexia"
               checked={prefs.dyslexiaFont}
               onChange={(v) => update("dyslexiaFont", v)}
+            />
+            <ToggleRow
+              icon={prefs.ttsActive ? VolumeX : Volume2}
+              label="Leitura em voz alta"
+              checked={prefs.ttsActive}
+              onChange={toggleTTS}
             />
 
             <button

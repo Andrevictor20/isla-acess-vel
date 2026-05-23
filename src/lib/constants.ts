@@ -16,13 +16,16 @@ export const CONTACT = {
 export const SOCIAL = {
   instagram: "https://instagram.com/institutosaoluisacessivel",
   facebook: "#",
+  youtube: "#",
+  tiktok: "#",
   whatsapp: "#",
-};
+} as const;
 
 export const NAV_LINKS = [
   { label: "Sobre", href: "#sobre" },
   { label: "Ações", href: "#acoes" },
   { label: "Impacto", href: "#impacto" },
+  { label: "Depoimentos", href: "#depoimentos" },
   { label: "Localização", href: "#localizacao" },
   { label: "Contato", href: "#contato" },
 ] as const;

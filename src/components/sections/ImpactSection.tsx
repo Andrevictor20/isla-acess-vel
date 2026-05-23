@@ -1,26 +1,39 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
 import { IMPACT_STATS } from "@/lib/constants";
 
 function Counter({ to, suffix }: { to: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
   const [value, setValue] = useState(0);
+  const startedRef = useRef(false);
 
   useEffect(() => {
-    if (!inView) return;
-    const duration = 1800;
-    const start = performance.now();
-    let raf = 0;
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setValue(Math.round(eased * to));
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, to]);
+    const el = ref.current;
+    if (!el || startedRef.current) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting && !startedRef.current) {
+            startedRef.current = true;
+            const duration = 1800;
+            const start = performance.now();
+            let raf = 0;
+            const tick = (now: number) => {
+              const t = Math.min(1, (now - start) / duration);
+              const eased = 1 - Math.pow(1 - t, 3);
+              setValue(Math.round(eased * to));
+              if (t < 1) raf = requestAnimationFrame(tick);
+            };
+            raf = requestAnimationFrame(tick);
+            io.disconnect();
+            return () => cancelAnimationFrame(raf);
+          }
+        }
+      },
+      { rootMargin: "-80px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [to]);
 
   return (
     <span ref={ref}>
@@ -42,13 +55,7 @@ export function ImpactSection() {
       <div className="absolute -bottom-32 left-0 h-80 w-80 rounded-full bg-accent/20 blur-3xl" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-7xl px-4 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mx-auto max-w-2xl text-center"
-        >
+        <div className="mx-auto max-w-2xl text-center">
           <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
             Nosso impacto
           </span>
@@ -58,16 +65,12 @@ export function ImpactSection() {
           >
             Números que contam histórias reais
           </h2>
-        </motion.div>
+        </div>
 
         <div className="mt-14 grid grid-cols-2 gap-6 md:grid-cols-4">
-          {IMPACT_STATS.map((s, i) => (
-            <motion.div
+          {IMPACT_STATS.map((s) => (
+            <div
               key={s.label}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
               className="rounded-2xl border border-white/15 bg-white/5 p-6 text-center backdrop-blur"
             >
               <p className="font-heading text-4xl font-extrabold text-accent md:text-5xl">
@@ -76,7 +79,7 @@ export function ImpactSection() {
               <p className="mt-2 text-sm font-semibold uppercase tracking-wider text-primary-foreground/80">
                 {s.label}
               </p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
