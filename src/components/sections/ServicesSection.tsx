@@ -82,14 +82,22 @@ export function ServicesSection() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.45, delay: (i % 3) * 0.08 }}
             >
-              <Card className="group h-full border-border/60 bg-card p-7 transition-all hover:-translate-y-1 hover:border-secondary/50 hover:shadow-soft">
-                <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/15 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+              <Card className="group relative h-full overflow-hidden border-border/60 bg-card p-7 transition-all hover:-translate-y-1 hover:border-secondary/50 hover:shadow-soft">
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute right-4 top-3 font-heading text-5xl font-extrabold leading-none text-accent/15"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="relative inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent/15 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
                   <a.icon className="h-6 w-6" aria-hidden="true" />
                 </div>
-                <h3 className="mt-5 font-heading text-xl font-bold text-primary">
+                <h3 className="relative mt-5 font-heading text-xl font-bold text-primary">
                   {a.title}
                 </h3>
-                <p className="mt-2 text-sm text-muted-foreground">{a.text}</p>
+                <p className="relative mt-2 text-sm text-muted-foreground">
+                  {a.text}
+                </p>
               </Card>
             </motion.div>
           ))}

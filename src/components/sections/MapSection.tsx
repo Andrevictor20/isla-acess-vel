@@ -1,58 +1,16 @@
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { CONTACT, SITE } from "@/lib/constants";
-import "leaflet/dist/leaflet.css";
+
+const GOOGLE_MAPS_EMBED = `https://www.google.com/maps?q=${CONTACT.coords.lat},${CONTACT.coords.lng}&z=15&output=embed`;
+
+const info = [
+  { icon: MapPin, label: "Endereço", value: CONTACT.address },
+  { icon: Phone, label: "Telefone", value: CONTACT.phone },
+  { icon: Mail, label: "Email", value: CONTACT.email },
+];
 
 export function MapSection() {
-  const [Map, setMap] = useState<null | {
-    MapContainer: typeof import("react-leaflet").MapContainer;
-    TileLayer: typeof import("react-leaflet").TileLayer;
-    Marker: typeof import("react-leaflet").Marker;
-    Popup: typeof import("react-leaflet").Popup;
-    icon: import("leaflet").Icon;
-  }>(null);
-
-  useEffect(() => {
-    let cancel = false;
-    (async () => {
-      const [rl, L] = await Promise.all([
-        import("react-leaflet"),
-        import("leaflet"),
-      ]);
-      const icon = new L.Icon({
-        iconUrl:
-          "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-        iconRetinaUrl:
-          "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-        shadowUrl:
-          "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41],
-      });
-      if (!cancel) {
-        setMap({
-          MapContainer: rl.MapContainer,
-          TileLayer: rl.TileLayer,
-          Marker: rl.Marker,
-          Popup: rl.Popup,
-          icon,
-        });
-      }
-    })();
-    return () => {
-      cancel = true;
-    };
-  }, []);
-
-  const info = [
-    { icon: MapPin, label: "Endereço", value: CONTACT.address },
-    { icon: Phone, label: "Telefone", value: CONTACT.phone },
-    { icon: Mail, label: "Email", value: CONTACT.email },
-  ];
-
   return (
     <section
       id="localizacao"
@@ -76,9 +34,7 @@ export function MapSection() {
           >
             Nossa Localização
           </h2>
-          <p className="mt-4 text-muted-foreground">
-            {CONTACT.address}
-          </p>
+          <p className="mt-4 text-muted-foreground">{CONTACT.address}</p>
         </motion.div>
 
         <motion.div
@@ -88,38 +44,15 @@ export function MapSection() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mt-10 overflow-hidden rounded-3xl border border-border bg-card shadow-soft"
         >
-          <div
-            className="h-[300px] w-full bg-muted sm:h-[380px] lg:h-[460px]"
-            role="region"
-            aria-label={`Mapa da localização do ${SITE.name} em São Luís, Maranhão`}
-          >
-            {Map ? (
-              <Map.MapContainer
-                center={[CONTACT.coords.lat, CONTACT.coords.lng]}
-                zoom={14}
-                scrollWheelZoom={false}
-                style={{ height: "100%", width: "100%" }}
-              >
-                <Map.TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Map.Marker
-                  position={[CONTACT.coords.lat, CONTACT.coords.lng]}
-                  icon={Map.icon}
-                >
-                  <Map.Popup>
-                    <strong>{SITE.name}</strong>
-                    <br />
-                    {CONTACT.address}
-                  </Map.Popup>
-                </Map.Marker>
-              </Map.MapContainer>
-            ) : (
-              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-                Carregando mapa…
-              </div>
-            )}
+          <div className="h-[300px] w-full bg-muted sm:h-[380px] lg:h-[460px]">
+            <iframe
+              src={GOOGLE_MAPS_EMBED}
+              title={`Mapa da localização do ${SITE.name} em São Luís, Maranhão`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-full w-full border-0"
+              allowFullScreen
+            />
           </div>
         </motion.div>
 

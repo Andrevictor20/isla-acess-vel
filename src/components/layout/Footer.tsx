@@ -1,6 +1,21 @@
-import { Instagram, Facebook, Mail, Phone, MapPin } from "lucide-react";
+import { Instagram, Facebook, Youtube, Mail, Phone, MapPin } from "lucide-react";
 import { SITE, SOCIAL, NAV_LINKS, CONTACT } from "@/lib/constants";
 import logo from "@/assets/isla-logo.jpg";
+
+function TikTokIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.17 8.17 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z" />
+    </svg>
+  );
+}
+
+const socialLinks = [
+  { href: SOCIAL.instagram, label: "Instagram do ISLA", icon: Instagram },
+  { href: SOCIAL.facebook, label: "Facebook do ISLA", icon: Facebook },
+  { href: SOCIAL.youtube, label: "YouTube do ISLA", icon: Youtube },
+  { href: SOCIAL.tiktok, label: "TikTok do ISLA", icon: TikTokIcon },
+];
 
 export function Footer() {
   return (
@@ -13,6 +28,8 @@ export function Footer() {
               <img
                 src={logo}
                 alt={`Logo ${SITE.name}`}
+                loading="lazy"
+                decoding="async"
                 className="h-14 w-14 rounded-full object-cover ring-2 ring-secondary/40"
               />
               <div>
@@ -23,6 +40,21 @@ export function Footer() {
             <p className="mt-4 max-w-sm text-sm text-primary-foreground/80">
               {SITE.description}
             </p>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+              {socialLinks.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label={s.label}
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  <s.icon />
+                </a>
+              ))}
+            </div>
           </div>
 
           <nav aria-label="Links rápidos">
@@ -65,27 +97,6 @@ export function Footer() {
                 </a>
               </li>
             </ul>
-
-            <div className="mt-5 flex gap-3">
-              <a
-                href={SOCIAL.instagram}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram do ISLA"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 hover:bg-accent hover:text-accent-foreground"
-              >
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a
-                href={SOCIAL.facebook}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Facebook do ISLA"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 hover:bg-accent hover:text-accent-foreground"
-              >
-                <Facebook className="h-5 w-5" />
-              </a>
-            </div>
           </div>
         </div>
 
