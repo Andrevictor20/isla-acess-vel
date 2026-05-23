@@ -141,10 +141,6 @@
     linear-gradient(180deg, var(--surface), var(--background));
 }
 
-/* Leaflet z-index fix beneath header */
-.leaflet-container {
-  z-index: 0;
-}
 
 /* ===== Accessibility preferences (toggled via AccessibilityWidget) ===== */
 html {

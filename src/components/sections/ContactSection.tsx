@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,6 +49,8 @@ const subjectLabels: Record<ContactValues["subject"], string> = {
 
 export function ContactSection() {
   const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; msg: string } | null>(null);
+  const feedbackRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
@@ -66,6 +68,7 @@ export function ContactSection() {
 
   const onSubmit = async (data: ContactValues) => {
     setLoading(true);
+    setFeedback(null);
     try {
       await sendContactEmail({
         ...data,
@@ -74,12 +77,22 @@ export function ContactSection() {
       toast.success("Mensagem enviada com sucesso!", {
         description: "Em breve nossa equipe entrará em contato.",
       });
+      setFeedback({
+        type: "success",
+        msg: "Mensagem enviada com sucesso! Em breve nossa equipe entrará em contato.",
+      });
       reset();
+      setTimeout(() => feedbackRef.current?.focus(), 50);
     } catch (err) {
       console.error(err);
       toast.error("Não foi possível enviar sua mensagem.", {
         description: "Tente novamente em alguns instantes.",
       });
+      setFeedback({
+        type: "error",
+        msg: "Não foi possível enviar sua mensagem. Tente novamente em alguns instantes.",
+      });
+      setTimeout(() => feedbackRef.current?.focus(), 50);
     } finally {
       setLoading(false);
     }
