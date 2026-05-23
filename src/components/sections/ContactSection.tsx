@@ -274,6 +274,25 @@ export function ContactSection() {
               )}
             </Button>
           </div>
+
+          <div
+            ref={feedbackRef}
+            tabIndex={-1}
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className={
+              feedback
+                ? `rounded-md border px-4 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                    feedback.type === "success"
+                      ? "border-secondary/40 bg-secondary/10 text-primary"
+                      : "border-destructive/40 bg-destructive/10 text-destructive"
+                  }`
+                : "sr-only"
+            }
+          >
+            {feedback?.msg ?? ""}
+          </div>
         </motion.form>
       </div>
     </section>
