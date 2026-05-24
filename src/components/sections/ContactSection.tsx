@@ -61,6 +61,7 @@ const subjectLabels: Record<ContactValues["subject"], string> = {
 export function ContactSection() {
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; msg: string } | null>(null);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   const feedbackRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -72,10 +73,11 @@ export function ContactSection() {
     formState: { errors },
   } = useForm<ContactValues>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { name: "", email: "", phone: "", message: "" },
+    defaultValues: { name: "", email: "", phone: "", message: "", lgpd: undefined as unknown as true },
   });
 
   const subjectValue = watch("subject");
+  const lgpdValue = watch("lgpd");
 
   const onSubmit = async (data: ContactValues) => {
     setLoading(true);
