@@ -114,7 +114,7 @@ export function ContactSection() {
   return (
     <section
       id="contato"
-      className="py-20 md:py-28"
+      className="bg-gradient-to-br from-primary/5 via-background to-secondary/5 py-20 md:py-28"
       aria-labelledby="contact-heading"
     >
       <div className="mx-auto max-w-5xl px-4 md:px-8">
@@ -264,6 +264,38 @@ export function ContactSection() {
             )}
           </div>
 
+          <div className="rounded-xl border border-border bg-background/60 p-4">
+            <label className="flex items-start gap-3 text-sm">
+              <input
+                id="lgpd"
+                type="checkbox"
+                checked={lgpdValue === true}
+                onChange={(e) =>
+                  setValue("lgpd", e.target.checked as true, { shouldValidate: true })
+                }
+                aria-invalid={!!errors.lgpd}
+                aria-describedby={errors.lgpd ? "lgpd-error" : undefined}
+                className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-border accent-primary"
+              />
+              <span className="text-foreground/85">
+                Li e concordo com o tratamento dos meus dados pessoais pelo ISLA conforme a{" "}
+                <button
+                  type="button"
+                  onClick={() => setPrivacyOpen(true)}
+                  className="font-semibold text-primary underline underline-offset-2 hover:text-secondary"
+                >
+                  Política de Privacidade
+                </button>{" "}
+                (LGPD — Lei 13.709/2018). <span className="text-destructive">*</span>
+              </span>
+            </label>
+            {errors.lgpd && (
+              <p id="lgpd-error" className="mt-2 text-sm text-destructive">
+                {errors.lgpd.message as string}
+              </p>
+            )}
+          </div>
+
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs text-muted-foreground">
               Campos com <span className="text-destructive">*</span> são obrigatórios.
@@ -308,6 +340,28 @@ export function ContactSection() {
           </div>
         </motion.form>
       </div>
+
+      <Dialog open={privacyOpen} onOpenChange={setPrivacyOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Política de Privacidade</DialogTitle>
+            <DialogDescription className="pt-3 text-left leading-relaxed text-foreground/80">
+              O Instituto São Luís Acessível coleta os dados informados neste
+              formulário (nome, email, telefone e mensagem) exclusivamente para
+              responder ao seu contato. Seus dados não são compartilhados com
+              terceiros e são armazenados de forma segura. Você pode solicitar a
+              exclusão dos seus dados a qualquer momento pelo email{" "}
+              <a
+                href={`mailto:${CONTACT.email}`}
+                className="font-semibold text-primary underline"
+              >
+                {CONTACT.email}
+              </a>
+              . Conforme a Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018).
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
