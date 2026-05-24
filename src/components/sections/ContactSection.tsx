@@ -17,7 +17,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { sendContactEmail } from "@/lib/emailjs";
+import { CONTACT } from "@/lib/constants";
 
 const contactSchema = z.object({
   name: z.string().trim().min(3, "Nome muito curto").max(100, "Máximo 100 caracteres"),
