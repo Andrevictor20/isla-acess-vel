@@ -59,7 +59,7 @@ export function AboutSection() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
             >
-              <Card className="group relative h-full overflow-hidden border-border/60 bg-card p-8 transition-all hover:-translate-y-1 hover:shadow-elegant">
+              <Card className="group relative h-full overflow-hidden border-border/60 bg-card p-8 transition-all after:absolute after:inset-y-0 after:left-0 after:w-1 after:rounded-l-2xl after:bg-gradient-to-b after:from-secondary after:to-accent after:opacity-0 after:transition-opacity hover:-translate-y-1 hover:shadow-elegant group-hover:after:opacity-100">
                 <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-secondary via-accent to-primary opacity-80" />
                 <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary/15 text-secondary transition-colors group-hover:bg-secondary group-hover:text-secondary-foreground">
                   <item.icon className="h-7 w-7" aria-hidden="true" />

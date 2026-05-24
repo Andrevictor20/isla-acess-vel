@@ -36,6 +36,9 @@ const contactSchema = z.object({
     .trim()
     .min(20, "Mensagem muito curta (mín. 20 caracteres)")
     .max(2000, "Máximo 2000 caracteres"),
+  lgpd: z.literal(true, {
+    errorMap: () => ({ message: "Você precisa aceitar para continuar" }),
+  }),
 });
 
 type ContactValues = z.infer<typeof contactSchema>;

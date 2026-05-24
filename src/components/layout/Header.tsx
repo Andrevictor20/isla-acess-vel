@@ -22,12 +22,32 @@ const topSocials = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const sections = NAV_LINKS.map((l) => document.querySelector(l.href)).filter(
+      Boolean,
+    ) as Element[];
+    if (!sections.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && e.target.id) {
+            setActiveSection("#" + e.target.id);
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" },
+    );
+    sections.forEach((s) => io.observe(s));
+    return () => io.disconnect();
   }, []);
 
   const handleAnchor = (href: string) => {
@@ -38,7 +58,6 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      {/* Top bar */}
       <div className="bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 text-xs md:px-8">
           <a
@@ -67,7 +86,6 @@ export function Header() {
         </div>
       </div>
 
-      {/* Main nav */}
       <div
         className={`transition-all duration-300 ${
           scrolled
@@ -102,20 +120,28 @@ export function Header() {
 
           <nav aria-label="Navegação principal" className="hidden lg:block">
             <ul className="flex items-center gap-1">
-              {NAV_LINKS.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleAnchor(link.href);
-                    }}
-                    className="inline-flex min-h-11 items-center rounded-md px-4 text-sm font-semibold text-foreground/80 transition-colors hover:bg-secondary/10 hover:text-primary"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              {NAV_LINKS.map((link) => {
+                const isActive = activeSection === link.href;
+                return (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleAnchor(link.href);
+                      }}
+                      aria-current={isActive ? "true" : undefined}
+                      className={`inline-flex min-h-11 items-center rounded-md px-4 text-sm transition-colors hover:bg-secondary/10 hover:text-primary ${
+                        isActive
+                          ? "bg-secondary/15 font-bold text-primary"
+                          : "font-semibold text-foreground/80"
+                      }`}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
@@ -147,20 +173,28 @@ export function Header() {
           >
             <nav aria-label="Navegação móvel" className="mx-auto max-w-7xl px-4 py-3">
               <ul className="flex flex-col gap-1">
-                {NAV_LINKS.map((link) => (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleAnchor(link.href);
-                      }}
-                      className="flex min-h-11 items-center rounded-md px-3 text-base font-semibold text-foreground/90 hover:bg-secondary/10 hover:text-primary"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
+                {NAV_LINKS.map((link) => {
+                  const isActive = activeSection === link.href;
+                  return (
+                    <li key={link.href}>
+                      <a
+                        href={link.href}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleAnchor(link.href);
+                        }}
+                        aria-current={isActive ? "true" : undefined}
+                        className={`flex min-h-11 items-center rounded-md px-3 text-base hover:bg-secondary/10 hover:text-primary ${
+                          isActive
+                            ? "bg-secondary/15 font-bold text-primary"
+                            : "font-semibold text-foreground/90"
+                        }`}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  );
+                })}
                 <li className="pt-2">
                   <Button
                     onClick={() => handleAnchor("#contato")}

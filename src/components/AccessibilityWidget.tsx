@@ -12,6 +12,7 @@ import {
   Plus,
   Volume2,
   VolumeX,
+  Moon,
 } from "lucide-react";
 
 type Prefs = {
@@ -21,6 +22,7 @@ type Prefs = {
   reduceMotion: boolean;
   dyslexiaFont: boolean;
   ttsActive: boolean;
+  darkMode: boolean;
 };
 
 const DEFAULT: Prefs = {
@@ -30,6 +32,7 @@ const DEFAULT: Prefs = {
   reduceMotion: false,
   dyslexiaFont: false,
   ttsActive: false,
+  darkMode: false,
 };
 
 const STORAGE_KEY = "isla-a11y-prefs";
@@ -42,6 +45,7 @@ function applyPrefs(p: Prefs) {
   root.classList.toggle("a11y-underline-links", p.underlineLinks);
   root.classList.toggle("a11y-reduce-motion", p.reduceMotion);
   root.classList.toggle("a11y-dyslexia", p.dyslexiaFont);
+  root.classList.toggle("dark", p.darkMode);
 }
 
 function speak(text: string) {
@@ -257,6 +261,12 @@ export function AccessibilityWidget() {
               label="Leitura em voz alta"
               checked={prefs.ttsActive}
               onChange={toggleTTS}
+            />
+            <ToggleRow
+              icon={Moon}
+              label="Modo escuro"
+              checked={prefs.darkMode}
+              onChange={(v) => update("darkMode", v)}
             />
 
             <button

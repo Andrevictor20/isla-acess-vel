@@ -113,6 +113,8 @@ export function HeroSection() {
           className="relative mx-auto"
         >
           <div className="absolute inset-0 -m-6 rounded-[2.5rem] bg-gradient-to-br from-secondary/30 via-transparent to-accent/30 blur-2xl" aria-hidden="true" />
+          <div className="absolute -inset-4 rounded-[2.5rem] border-2 border-secondary/40 animate-ping opacity-30" aria-hidden="true" />
+          <div className="absolute -inset-2 rounded-[2.25rem] border border-accent/40" aria-hidden="true" />
           <div className="relative rounded-[2rem] border-4 border-white bg-white p-3 shadow-elegant">
             <img
               src={logo}
@@ -123,7 +125,7 @@ export function HeroSection() {
               className="h-72 w-72 rounded-[1.5rem] object-cover sm:h-96 sm:w-96"
             />
           </div>
-          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-accent px-5 py-2 text-xs font-bold uppercase tracking-wider text-accent-foreground shadow-soft">
+          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 animate-pulse rounded-full bg-accent px-5 py-2 text-xs font-bold uppercase tracking-wider text-accent-foreground shadow-soft">
             Desde São Luís — MA
           </div>
         </motion.div>
