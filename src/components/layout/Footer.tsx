@@ -20,6 +20,7 @@ const socialLinks = [
 export function Footer() {
   return (
     <footer className="relative mt-20 bg-primary text-primary-foreground">
+      <div className="h-1 w-full bg-accent" aria-hidden="true" />
       <div className="bg-azulejo absolute inset-0 opacity-[0.06]" aria-hidden="true" />
       <div className="relative mx-auto max-w-7xl px-4 py-14 md:px-8">
         <div className="grid gap-10 md:grid-cols-3">

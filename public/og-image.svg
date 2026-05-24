@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1B2C6B"/>
+      <stop offset="1" stop-color="#0F1A47"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <circle cx="980" cy="180" r="200" fill="#00AEEF" opacity="0.18"/>
+  <circle cx="220" cy="500" r="220" fill="#F5A623" opacity="0.15"/>
+  <g transform="translate(120,200)">
+    <rect width="110" height="110" rx="55" fill="#FFFFFF"/>
+    <text x="55" y="65" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-size="46" fill="#1B2C6B">IS</text>
+  </g>
+  <text x="120" y="380" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-size="72" fill="#FFFFFF">Instituto São Luís</text>
+  <text x="120" y="455" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-size="72" fill="#00AEEF">Acessível — ISLA</text>
+  <text x="120" y="525" font-family="Nunito,Arial,sans-serif" font-weight="700" font-size="34" fill="#F5A623">A Inclusão é Para Todos</text>
+</svg>

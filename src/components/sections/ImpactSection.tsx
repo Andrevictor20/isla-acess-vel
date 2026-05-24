@@ -14,6 +14,14 @@ function Counter({ to, suffix }: { to: number; suffix?: string }) {
         for (const e of entries) {
           if (e.isIntersecting && !startedRef.current) {
             startedRef.current = true;
+            const prefersReduced = window.matchMedia(
+              "(prefers-reduced-motion: reduce)",
+            ).matches;
+            if (prefersReduced) {
+              setValue(to);
+              io.disconnect();
+              return;
+            }
             const duration = 1800;
             const start = performance.now();
             let raf = 0;
@@ -67,11 +75,11 @@ export function ImpactSection() {
           </h2>
         </div>
 
-        <div className="mt-14 grid grid-cols-2 gap-6 md:grid-cols-4">
+        <div className="mt-14 grid grid-cols-2 gap-6 md:grid-cols-4 md:divide-x md:divide-white/10 md:gap-0">
           {IMPACT_STATS.map((s) => (
             <div
               key={s.label}
-              className="rounded-2xl border border-white/15 bg-white/5 p-6 text-center backdrop-blur"
+              className="rounded-2xl border border-white/15 bg-white/5 p-6 text-center backdrop-blur md:rounded-none md:border-0 md:bg-transparent md:backdrop-blur-0"
             >
               <p className="font-heading text-4xl font-extrabold text-accent md:text-5xl">
                 <Counter to={s.value} suffix={s.suffix} />

@@ -8,8 +8,10 @@ export const SITE = {
 
 export const CONTACT = {
   address: "São Luís, Maranhão — Brasil",
+  addressShort: "São Luís — MA",
   phone: "(98) 0000-0000",
   email: "contato@isla.org.br",
+  whatsapp: "5598000000000",
   coords: { lat: -2.5297, lng: -44.3028 },
 };
 
@@ -26,6 +28,7 @@ export const NAV_LINKS = [
   { label: "Ações", href: "#acoes" },
   { label: "Impacto", href: "#impacto" },
   { label: "Depoimentos", href: "#depoimentos" },
+  { label: "Notícias", href: "#noticias" },
   { label: "Localização", href: "#localizacao" },
   { label: "Contato", href: "#contato" },
 ] as const;
