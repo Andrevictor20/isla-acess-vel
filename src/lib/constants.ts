@@ -7,20 +7,20 @@ export const SITE = {
 };
 
 export const CONTACT = {
-  address: "São Luís, Maranhão — Brasil",
+  address: "Rua Marechal Castelo Branco, N22 — São Luís, MA",
   addressShort: "São Luís — MA",
-  phone: "(98) 0000-0000",
+  phone: "+55 (98) 9884-2455",
   email: "contato@isla.org.br",
-  whatsapp: "5598000000000",
+  whatsapp: "5598988424 55",
   coords: { lat: -2.5297, lng: -44.3028 },
 };
 
 export const SOCIAL = {
-  instagram: "https://instagram.com/institutosaoluisacessivel",
+  instagram: "https://www.instagram.com/institutosaoluisacessivel",
   facebook: "#",
   youtube: "#",
   tiktok: "#",
-  whatsapp: "#",
+  whatsapp: "5598988424 55",
 } as const;
 
 export const NAV_LINKS = [
@@ -39,3 +39,6 @@ export const IMPACT_STATS = [
   { value: 8, suffix: "", label: "Anos de Atuação" },
   { value: 50, suffix: "+", label: "Parcerias Ativas" },
 ];
+
+export const SHEETS_URL =
+  "https://docs.google.com/spreadsheets/d/1iWeJsvLaZDr8M1cBO8Th_Vu6LNc3NBChlLzObXh7bww/gviz/tq?tqx=out:json";
