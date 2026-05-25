@@ -49,7 +49,7 @@ export function TestimonialsSection() {
           </h2>
         </motion.div>
 
-        <div className="mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible">
+        <div className="mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-6 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0">
           {testimonials.map((t, i) => (
             <motion.figure
               key={t.name}
