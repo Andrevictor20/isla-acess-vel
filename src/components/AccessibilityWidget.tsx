@@ -273,7 +273,7 @@ export function AccessibilityWidget() {
             </button>
           </div>
 
-          <div className="space-y-4 p-4">
+          <div className="max-h-[80vh] space-y-4 overflow-y-auto p-4">
             <div>
               <p className="mb-2 flex items-center gap-2 text-sm font-bold text-primary">
                 <Type className="h-4 w-4" aria-hidden="true" />
