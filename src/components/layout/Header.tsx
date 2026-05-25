@@ -58,7 +58,7 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className="bg-primary text-primary-foreground">
+      <div className="hidden sm:block bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 text-xs md:px-8">
           <a
             href={`tel:${CONTACT.phone}`}
@@ -195,6 +195,15 @@ export function Header() {
                     </li>
                   );
                 })}
+                <li className="pt-2">
+                  <a
+                    href={`tel:${CONTACT.phone}`}
+                    className="flex min-h-11 items-center gap-2 rounded-md px-3 text-base font-semibold text-primary hover:bg-secondary/10"
+                  >
+                    <Phone className="h-4 w-4" aria-hidden="true" />
+                    {CONTACT.phone}
+                  </a>
+                </li>
                 <li className="pt-2">
                   <Button
                     onClick={() => handleAnchor("#contato")}

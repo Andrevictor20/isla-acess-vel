@@ -48,18 +48,89 @@ function applyPrefs(p: Prefs) {
   root.classList.toggle("dark", p.darkMode);
 }
 
-function speak(text: string) {
+let ttsKeepAlive: ReturnType<typeof setInterval> | null = null;
+
+function stopSpeaking() {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  if (ttsKeepAlive) {
+    clearInterval(ttsKeepAlive);
+    ttsKeepAlive = null;
+  }
+}
+
+function getBestVoice(): SpeechSynthesisVoice | null {
+  const voices = window.speechSynthesis.getVoices();
+  return (
+    voices.find((v) => v.lang === "pt-BR") ||
+    voices.find((v) => v.lang.startsWith("pt")) ||
+    voices[0] ||
+    null
+  );
+}
+
+function speakChunked(text: string) {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  stopSpeaking();
+  const sentences = text
+    .replace(/\n+/g, " ")
+    .split(/(?<=[.!?])\s+/)
+    .filter((s) => s.trim().length > 1);
+  if (sentences.length === 0) return;
+  let index = 0;
+  const speakNext = () => {
+    if (index >= sentences.length) {
+      stopSpeaking();
+      return;
+    }
+    const utt = new SpeechSynthesisUtterance(sentences[index]);
+    utt.lang = "pt-BR";
+    utt.rate = 0.85;
+    utt.pitch = 1;
+    const voice = getBestVoice();
+    if (voice) utt.voice = voice;
+    utt.onend = () => {
+      index++;
+      speakNext();
+    };
+    utt.onerror = () => {
+      index++;
+      speakNext();
+    };
+    window.speechSynthesis.speak(utt);
+  };
+  ttsKeepAlive = setInterval(() => {
+    if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+  }, 10_000);
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length === 0) {
+    window.speechSynthesis.addEventListener("voiceschanged", speakNext, { once: true });
+  } else {
+    speakNext();
+  }
+}
+
+function speakShort(text: string) {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = "pt-BR";
   utt.rate = 0.9;
-  window.speechSynthesis.speak(utt);
-}
-
-function stopSpeaking() {
-  if (typeof window !== "undefined" && "speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
+  const voice = getBestVoice();
+  if (voice) utt.voice = voice;
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length === 0) {
+    window.speechSynthesis.addEventListener(
+      "voiceschanged",
+      () => {
+        const v = getBestVoice();
+        if (v) utt.voice = v;
+        window.speechSynthesis.speak(utt);
+      },
+      { once: true },
+    );
+  } else {
+    window.speechSynthesis.speak(utt);
   }
 }
 
