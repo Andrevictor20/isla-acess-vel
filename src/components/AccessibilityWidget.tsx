@@ -176,19 +176,23 @@ export function AccessibilityWidget() {
   // TTS hover handler
   useEffect(() => {
     if (!prefs.ttsActive) return;
-    let lastText = "";
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    let lastSpoken = "";
     const handler = (e: MouseEvent) => {
       const el = e.target as HTMLElement | null;
-      if (!el || !el.innerText) return;
-      const text = el.innerText.trim();
-      if (text.length > 1 && text.length < 500 && text !== lastText) {
-        lastText = text;
-        speak(text);
-      }
+      if (!el) return;
+      const text = el.innerText?.trim() ?? "";
+      if (text.length < 2 || text.length > 300 || text === lastSpoken) return;
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        lastSpoken = text;
+        speakShort(text);
+      }, 350);
     };
     document.addEventListener("mouseover", handler);
     return () => {
       document.removeEventListener("mouseover", handler);
+      if (debounceTimer) clearTimeout(debounceTimer);
       stopSpeaking();
     };
   }, [prefs.ttsActive]);
@@ -236,7 +240,7 @@ export function AccessibilityWidget() {
           type="button"
           onClick={() => {
             const main = document.querySelector("main");
-            if (main) speak((main as HTMLElement).innerText);
+            if (main) speakChunked((main as HTMLElement).innerText);
           }}
           className="fixed bottom-5 left-24 z-[60] inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-bold text-white shadow-elegant"
           aria-label="Ouvir conteúdo da página"
