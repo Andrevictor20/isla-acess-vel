@@ -49,7 +49,7 @@ export function TestimonialsSection() {
           </h2>
         </motion.div>
 
-        <div className="mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible">
+        <div className="mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-6 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0">
           {testimonials.map((t, i) => (
             <motion.figure
               key={t.name}
@@ -57,7 +57,7 @@ export function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative w-[85vw] shrink-0 snap-start rounded-2xl border border-border bg-card p-7 shadow-soft md:w-auto md:shrink"
+              className="relative w-[82vw] min-w-[280px] shrink-0 snap-start rounded-2xl border border-border bg-card p-6 shadow-soft first:ml-0 last:mr-4 md:w-auto md:shrink md:p-7"
             >
               <Quote
                 className="absolute -top-4 left-6 h-10 w-10 rounded-full bg-accent p-2 text-accent-foreground"

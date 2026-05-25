@@ -35,8 +35,16 @@ function parseGviz(raw: string): NewsItem[] {
     .map((row: any) => {
       const c = row.c ?? [];
       const get = (key: string) => c[colIndex[key]]?.v?.toString().trim() ?? "";
+
+      const rawDate = c[colIndex["data"]]?.v?.toString().trim() ?? "";
+      const dateMatch = rawDate.match(/^DATE\((\d{4}),(\d{1,2}),(\d{1,2})\)$/);
+      const MONTHS = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+      const formattedDate = dateMatch
+        ? `${MONTHS[parseInt(dateMatch[2]) - 1]} ${dateMatch[1]}`
+        : rawDate;
+
       return {
-        data: get("data"),
+        data: formattedDate,
         tag: get("tag"),
         titulo: get("titulo"),
         resumo: get("resumo"),
