@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { CONTACT, SITE } from "@/lib/constants";
 
-const GOOGLE_MAPS_EMBED = `https://www.google.com/maps?q=${CONTACT.coords.lat},${CONTACT.coords.lng}&z=15&output=embed`;
+const GOOGLE_MAPS_EMBED = "https://www.google.com/maps?q=Rua+Marechal+Castelo+Branco+22+S%C3%A3o+Lu%C3%ADs+MA+Brasil&output=embed";
 
 const info = [
   { icon: MapPin, label: "Endereço", value: CONTACT.address },

@@ -48,18 +48,89 @@ function applyPrefs(p: Prefs) {
   root.classList.toggle("dark", p.darkMode);
 }
 
-function speak(text: string) {
+let ttsKeepAlive: ReturnType<typeof setInterval> | null = null;
+
+function stopSpeaking() {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  if (ttsKeepAlive) {
+    clearInterval(ttsKeepAlive);
+    ttsKeepAlive = null;
+  }
+}
+
+function getBestVoice(): SpeechSynthesisVoice | null {
+  const voices = window.speechSynthesis.getVoices();
+  return (
+    voices.find((v) => v.lang === "pt-BR") ||
+    voices.find((v) => v.lang.startsWith("pt")) ||
+    voices[0] ||
+    null
+  );
+}
+
+function speakChunked(text: string) {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  stopSpeaking();
+  const sentences = text
+    .replace(/\n+/g, " ")
+    .split(/(?<=[.!?])\s+/)
+    .filter((s) => s.trim().length > 1);
+  if (sentences.length === 0) return;
+  let index = 0;
+  const speakNext = () => {
+    if (index >= sentences.length) {
+      stopSpeaking();
+      return;
+    }
+    const utt = new SpeechSynthesisUtterance(sentences[index]);
+    utt.lang = "pt-BR";
+    utt.rate = 0.85;
+    utt.pitch = 1;
+    const voice = getBestVoice();
+    if (voice) utt.voice = voice;
+    utt.onend = () => {
+      index++;
+      speakNext();
+    };
+    utt.onerror = () => {
+      index++;
+      speakNext();
+    };
+    window.speechSynthesis.speak(utt);
+  };
+  ttsKeepAlive = setInterval(() => {
+    if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+  }, 10_000);
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length === 0) {
+    window.speechSynthesis.addEventListener("voiceschanged", speakNext, { once: true });
+  } else {
+    speakNext();
+  }
+}
+
+function speakShort(text: string) {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = "pt-BR";
   utt.rate = 0.9;
-  window.speechSynthesis.speak(utt);
-}
-
-function stopSpeaking() {
-  if (typeof window !== "undefined" && "speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
+  const voice = getBestVoice();
+  if (voice) utt.voice = voice;
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length === 0) {
+    window.speechSynthesis.addEventListener(
+      "voiceschanged",
+      () => {
+        const v = getBestVoice();
+        if (v) utt.voice = v;
+        window.speechSynthesis.speak(utt);
+      },
+      { once: true },
+    );
+  } else {
+    window.speechSynthesis.speak(utt);
   }
 }
 
@@ -105,19 +176,23 @@ export function AccessibilityWidget() {
   // TTS hover handler
   useEffect(() => {
     if (!prefs.ttsActive) return;
-    let lastText = "";
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    let lastSpoken = "";
     const handler = (e: MouseEvent) => {
       const el = e.target as HTMLElement | null;
-      if (!el || !el.innerText) return;
-      const text = el.innerText.trim();
-      if (text.length > 1 && text.length < 500 && text !== lastText) {
-        lastText = text;
-        speak(text);
-      }
+      if (!el) return;
+      const text = el.innerText?.trim() ?? "";
+      if (text.length < 2 || text.length > 300 || text === lastSpoken) return;
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        lastSpoken = text;
+        speakShort(text);
+      }, 350);
     };
     document.addEventListener("mouseover", handler);
     return () => {
       document.removeEventListener("mouseover", handler);
+      if (debounceTimer) clearTimeout(debounceTimer);
       stopSpeaking();
     };
   }, [prefs.ttsActive]);
@@ -165,7 +240,7 @@ export function AccessibilityWidget() {
           type="button"
           onClick={() => {
             const main = document.querySelector("main");
-            if (main) speak((main as HTMLElement).innerText);
+            if (main) speakChunked((main as HTMLElement).innerText);
           }}
           className="fixed bottom-5 left-24 z-[60] inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-bold text-white shadow-elegant"
           aria-label="Ouvir conteúdo da página"
@@ -198,7 +273,7 @@ export function AccessibilityWidget() {
             </button>
           </div>
 
-          <div className="space-y-4 p-4">
+          <div className="max-h-[80vh] space-y-4 overflow-y-auto p-4">
             <div>
               <p className="mb-2 flex items-center gap-2 text-sm font-bold text-primary">
                 <Type className="h-4 w-4" aria-hidden="true" />

@@ -79,7 +79,7 @@ export function HeroSection() {
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
               Parceiros e Certificações
             </p>
-            <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3 md:grid-cols-4">
               {partners.map((p) => (
                 <li
                   key={p.label}
@@ -122,11 +122,11 @@ export function HeroSection() {
               loading="eager"
               fetchPriority="high"
               decoding="async"
-              className="h-72 w-72 rounded-[1.5rem] object-cover sm:h-96 sm:w-96"
+              className="h-52 w-52 rounded-[1.5rem] object-cover sm:h-72 sm:w-72 md:h-96 md:w-96"
             />
           </div>
-          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 animate-pulse rounded-full bg-accent px-5 py-2 text-xs font-bold uppercase tracking-wider text-accent-foreground shadow-soft">
-            Desde São Luís — MA
+          <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 animate-pulse rounded-full bg-accent px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-accent-foreground shadow-soft">
+            DESDE 2018 — SÃO LUÍS, MA
           </div>
         </motion.div>
       </div>

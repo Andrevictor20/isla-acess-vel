@@ -149,7 +149,7 @@ export function ContactSection() {
           noValidate
           aria-label="Formulário de contato"
         >
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <Label htmlFor="name" className="font-semibold">
                 Nome completo <span className="text-destructive">*</span>
@@ -191,7 +191,7 @@ export function ContactSection() {
             </div>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <Label htmlFor="phone" className="font-semibold">
                 Telefone
