@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://isla.org.br/sitemap.xml
+Sitemap: https://isla-acess-vel.vercel.app/sitemap.xml
