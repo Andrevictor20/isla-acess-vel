@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Quote } from "lucide-react";
 
 const testimonials = [
   {
@@ -56,14 +55,10 @@ export function TestimonialsSection() {
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              className="relative w-[78vw] min-w-[240px] max-w-[340px] shrink-0 snap-center rounded-2xl border border-border bg-card p-6 pt-10 shadow-soft md:w-auto md:max-w-none md:shrink md:snap-start md:p-7 md:pt-10"
+              className="relative w-[78vw] min-w-[240px] max-w-[340px] shrink-0 snap-center rounded-2xl border border-border bg-card p-6 shadow-soft md:w-auto md:max-w-none md:shrink md:snap-start md:p-7"
               transition={{ duration: 0.5, delay: i * 0.1 }}
             >
-              <Quote
-                className="absolute -top-5 left-6 h-10 w-10 rounded-full bg-accent p-2 text-accent-foreground"
-                aria-hidden="true"
-              />
-              <blockquote className="mt-3 text-base leading-relaxed text-foreground">
+              <blockquote className="text-base leading-relaxed text-foreground">
                 <p>&ldquo;{t.text}&rdquo;</p>
               </blockquote>
               <figcaption className="mt-6 flex items-center gap-3 border-t border-border pt-5">
