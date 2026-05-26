@@ -20,7 +20,7 @@ export const SOCIAL = {
   facebook: "#",
   youtube: "#",
   tiktok: "#",
-  whatsapp: "5598988424 55",
+  whatsapp: "559898842455",
 } as const;
 
 export const NAV_LINKS = [
