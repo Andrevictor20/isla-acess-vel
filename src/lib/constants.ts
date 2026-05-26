@@ -11,7 +11,7 @@ export const CONTACT = {
   addressShort: "São Luís — MA",
   phone: "+55 (98) 9884-2455",
   email: "contato@isla.org.br",
-  whatsapp: "5598988424 55",
+  whatsapp: "559898842455",
   coords: { lat: -2.5297, lng: -44.3028 },
 };
 
