@@ -34,17 +34,28 @@ function parseGviz(raw: string): NewsItem[] {
   return rows
     .map((row: any) => {
       const c = row.c ?? [];
-      const get = (key: string) => c[colIndex[key]]?.v?.toString().trim() ?? "";
-
-      const rawDate = c[colIndex["data"]]?.v?.toString().trim() ?? "";
-      const dateMatch = rawDate.match(/^DATE\((\d{4}),(\d{1,2}),(\d{1,2})\)$/);
-      const MONTHS = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
-      const formattedDate = dateMatch
-        ? `${MONTHS[parseInt(dateMatch[2]) - 1]} ${dateMatch[1]}`
-        : rawDate;
+      const getRaw = (key: string) => c[colIndex[key]]?.v;
+      const get = (key: string) => {
+        const raw = getRaw(key);
+        if (raw == null) return '';
+        if (typeof raw === 'object' && raw !== null) {
+          const d = raw as { year?: number; month?: number; day?: number };
+          if (d.year !== undefined && d.month !== undefined && d.day !== undefined) {
+            const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+            return `${months[d.month]} ${d.year}`;
+          }
+        }
+        const str = raw.toString().trim();
+        const match = str.match(/^Date\((\d{4}),(\d{1,2}),(\d{1,2})\)$/i);
+        if (match) {
+          const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+          return `${months[parseInt(match[2], 10)]} ${match[1]}`;
+        }
+        return str;
+      };
 
       return {
-        data: formattedDate,
+        data: get("data"),
         tag: get("tag"),
         titulo: get("titulo"),
         resumo: get("resumo"),

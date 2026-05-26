@@ -113,7 +113,6 @@ export function HeroSection() {
           className="relative mx-auto"
         >
           <div className="absolute inset-0 -m-6 rounded-[2.5rem] bg-gradient-to-br from-secondary/30 via-transparent to-accent/30 blur-2xl" aria-hidden="true" />
-          <div className="absolute -inset-4 rounded-[2.5rem] border-2 border-secondary/40 animate-ping opacity-30" aria-hidden="true" />
           <div className="absolute -inset-2 rounded-[2.25rem] border border-accent/40" aria-hidden="true" />
           <div className="relative rounded-[2rem] border-4 border-white bg-white p-3 shadow-elegant">
             <img
