@@ -4,7 +4,6 @@ const partners = [
   "OAB Maranhão",
   "UFMA",
   "SEBRAE MA",
-  "Parceiro (em breve)",
 ];
 
 export function PartnersSection() {
