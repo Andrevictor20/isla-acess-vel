@@ -36,6 +36,10 @@ export function PartnersSection() {
               {p}
             </li>
           ))}
+          <li className="flex h-20 min-w-[220px] shrink-0 flex-col items-center justify-center rounded-xl border-2 border-dashed border-secondary/40 bg-secondary/5 p-4 text-center transition-colors hover:border-secondary hover:bg-secondary/10 md:min-w-0">
+            <span className="text-xs font-bold text-secondary">+ Seja parceiro</span>
+            <a href="#contato" className="mt-1 text-[11px] text-muted-foreground underline underline-offset-2 hover:text-primary">Entre em contato</a>
+          </li>
         </ul>
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
