@@ -56,7 +56,7 @@ export function TestimonialsSection() {
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              className="relative w-[calc(100vw-3.5rem)] min-w-[260px] max-w-sm shrink-0 snap-start rounded-2xl border border-border bg-card p-6 pt-10 shadow-soft md:w-auto md:max-w-none md:shrink md:p-7 md:pt-10"
+              className="relative w-[78vw] min-w-[240px] max-w-[340px] shrink-0 snap-center rounded-2xl border border-border bg-card p-6 pt-10 shadow-soft md:w-auto md:max-w-none md:shrink md:snap-start md:p-7 md:pt-10"
               transition={{ duration: 0.5, delay: i * 0.1 }}
             >
               <Quote
