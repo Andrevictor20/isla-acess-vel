@@ -14,8 +14,9 @@ export function WhatsAppButton() {
   const msg = encodeURIComponent(
     "Olá! Vim pelo site do ISLA e gostaria de mais informações.",
   );
-  const href = CONTACT.whatsapp
-    ? `https://wa.me/${CONTACT.whatsapp}?text=${msg}`
+  const waNumber = CONTACT.whatsapp.replace(/\D/g, "");
+  const href = waNumber
+    ? `https://wa.me/${waNumber}?text=${msg}`
     : "#";
 
   if (!visible) return null;

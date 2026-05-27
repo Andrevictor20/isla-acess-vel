@@ -9,9 +9,9 @@ export const SITE = {
 export const CONTACT = {
   address: "Rua Marechal Castelo Branco, N22 — São Luís, MA",
   addressShort: "São Luís — MA",
-  phone: "+55 (98) 9884-2455",
+  phone: "98 8884-2455",
   email: "contato@isla.org.br",
-  whatsapp: "559898842455",
+  whatsapp: "+55 98 8884-2455",
   coords: { lat: -2.5297, lng: -44.3028 },
 };
 
@@ -20,7 +20,7 @@ export const SOCIAL = {
   facebook: "#",
   youtube: "#",
   tiktok: "#",
-  whatsapp: "559898842455",
+  whatsapp: "+55 98 8884-2455",
 } as const;
 
 export const NAV_LINKS = [
