@@ -17,35 +17,40 @@ const TAG_COLORS: Record<NewsItem["cor"], string> = {
   primary: "bg-primary/10 text-primary",
 };
 
+type GvizCell = { v?: string | number | { year?: number; month?: number; day?: number } | null };
+type GvizRow = { c?: GvizCell[] };
+type GvizCol = { label?: string };
+type GvizParsed = { table?: { rows?: GvizRow[]; cols?: GvizCol[] } };
+
 function parseGviz(raw: string): NewsItem[] {
   const jsonStr = raw.replace(/^[^{]*/, "").replace(/[^}]*$/, "");
-  let parsed: any;
+  let parsed: GvizParsed;
   try {
-    parsed = JSON.parse(jsonStr);
+    parsed = JSON.parse(jsonStr) as GvizParsed;
   } catch {
     return [];
   }
-  const rows: any[] = parsed?.table?.rows ?? [];
-  const cols: any[] = parsed?.table?.cols ?? [];
+  const rows: GvizRow[] = parsed?.table?.rows ?? [];
+  const cols: GvizCol[] = parsed?.table?.cols ?? [];
   const colIndex: Record<string, number> = {};
-  cols.forEach((c: any, i: number) => {
+  cols.forEach((c: GvizCol, i: number) => {
     colIndex[(c.label || "").toLowerCase().trim()] = i;
   });
   return rows
-    .map((row: any) => {
+    .map((row: GvizRow) => {
       const c = row.c ?? [];
       const getRaw = (key: string) => c[colIndex[key]]?.v;
       const get = (key: string) => {
-        const raw = getRaw(key);
-        if (raw == null) return '';
-        if (typeof raw === 'object' && raw !== null) {
-          const d = raw as { year?: number; month?: number; day?: number };
+        const rawVal = getRaw(key);
+        if (rawVal == null) return '';
+        if (typeof rawVal === 'object' && rawVal !== null) {
+          const d = rawVal as { year?: number; month?: number; day?: number };
           if (d.year !== undefined && d.month !== undefined && d.day !== undefined) {
             const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
             return `${months[d.month]} ${d.year}`;
           }
         }
-        const str = raw.toString().trim();
+        const str = rawVal.toString().trim();
         const match = str.match(/^Date\((\d{4}),(\d{1,2}),(\d{1,2})\)$/i);
         if (match) {
           const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
@@ -81,8 +86,8 @@ export function NewsSection() {
         setNews(parseGviz(raw).slice(0, 3));
         setLoading(false);
       })
-      .catch((err) => {
-        if (err.name === "AbortError") return;
+      .catch((err: unknown) => {
+        if (err instanceof Error && err.name === "AbortError") return;
         setError(true);
         setLoading(false);
       });
@@ -100,7 +105,7 @@ export function NewsSection() {
             id="news-heading"
             className="mt-3 font-heading text-3xl font-extrabold text-primary md:text-5xl"
           >
-            Notícias & Atualizações
+            Notícias &amp; Atualizações
           </h2>
           <p className="mt-3 text-muted-foreground">
             Acompanhe nossas ações, projetos e conquistas recentes.

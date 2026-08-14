@@ -248,7 +248,12 @@ export default function ContactForm() {
           aria-labelledby="privacy-title"
           className="fixed inset-0 z-[80] flex items-center justify-center p-4"
         >
-          <div className="absolute inset-0 bg-black/50" onClick={() => setPrivacyOpen(false)} />
+          <button
+            type="button"
+            aria-label="Fechar modal"
+            className="absolute inset-0 bg-black/50 cursor-default"
+            onClick={() => setPrivacyOpen(false)}
+          />
           <div className="relative max-w-lg w-full rounded-2xl bg-[var(--card)] p-6 shadow-[var(--shadow-elegant)]">
             <h2 id="privacy-title" className="text-lg font-bold text-[var(--primary)]" style={{ fontFamily: 'var(--font-heading)' }}>
               Política de Privacidade

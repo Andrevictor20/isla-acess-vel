@@ -45,5 +45,8 @@ dist-ssr
 studio/node_modules/
 studio/dist/
 studio/.sanity/
+
+# Lovable (editor metadata)
+.lovable/
 *.sln
 *.sw?

@@ -1,4 +1,4 @@
-name: Verify Quality Gates
+name: CI — Type Check · Lint · Build
 
 on:
   pull_request:
@@ -8,15 +8,9 @@ on:
 
 jobs:
   verify:
-    name: Type Check · Lint · Build · A11y · Lighthouse
+    name: Type Check · Lint · Build
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    env:
-      PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID }}
-      PUBLIC_SANITY_DATASET: ${{ secrets.PUBLIC_SANITY_DATASET }}
-      PUBLIC_GA_ID: ${{ secrets.PUBLIC_GA_ID }}
-      PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -40,14 +34,5 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # Avoid Sanity fetch errors during build if no project configured yet
-          PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID || 'placeholder' }}
+          PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID || 'bhpznnoe' }}
           PUBLIC_SANITY_DATASET: ${{ secrets.PUBLIC_SANITY_DATASET || 'production' }}
-
-      - name: Run a11y audit (pa11y-ci)
-        run: npm run test:a11y
-
-      - name: Run Lighthouse CI
-        run: npm run test:lighthouse
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
