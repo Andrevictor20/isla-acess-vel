@@ -1,0 +1,77 @@
+---
+import { TESTIMONIALS } from '@/lib/constants';
+import { urlFor } from '@/lib/image';
+import type { SiteSettings } from '@/lib/sanity';
+
+export interface Props {
+  settings?: SiteSettings | null;
+}
+
+const { settings } = Astro.props;
+
+// Use Sanity testimonials if available, else fall back to hardcoded
+const testimonials = settings?.testimonials
+  ? settings.testimonials
+  : TESTIMONIALS.map((t) => ({ ...t, photo: undefined }));
+---
+
+<section id="depoimentos" class="relative py-20 md:py-28" aria-labelledby="testimonials-heading">
+  <div class="bg-azulejo absolute inset-0 opacity-[0.04]" aria-hidden="true"></div>
+  <div class="relative mx-auto max-w-7xl px-4 md:px-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <span class="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary)]">
+        Vozes que importam
+      </span>
+      <h2
+        id="testimonials-heading"
+        class="mt-3 text-3xl font-extrabold text-[var(--primary)] md:text-5xl"
+        style="font-family: var(--font-heading); letter-spacing: -0.02em"
+      >
+        Depoimentos de quem viveu a transformação
+      </h2>
+    </div>
+
+    <div class="-mx-4 mt-16 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-6 sm:-mx-6 sm:scroll-px-6 sm:px-6 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0">
+      {testimonials.map((t) => {
+        const photoUrl = t.photo
+          ? urlFor(t.photo)?.width(96).height(96).fit('crop').auto('format').url()
+          : null;
+        const initials = 'initials' in t
+          ? (t as { initials: string }).initials
+          : t.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
+
+        return (
+          <figure class="relative w-[78vw] min-w-[240px] max-w-[340px] shrink-0 snap-center rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-soft)] md:w-auto md:max-w-none md:shrink md:snap-start md:p-7">
+            <blockquote class="text-base leading-relaxed text-[var(--foreground)]">
+              <p>&ldquo;{t.text}&rdquo;</p>
+            </blockquote>
+            <figcaption class="mt-6 flex items-center gap-3 border-t border-[var(--border)] pt-5">
+              {photoUrl ? (
+                <img
+                  src={photoUrl}
+                  alt={`Foto de ${t.name}`}
+                  loading="lazy"
+                  decoding="async"
+                  width="48"
+                  height="48"
+                  class="h-12 w-12 rounded-full object-cover"
+                />
+              ) : (
+                <div
+                  aria-hidden="true"
+                  class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[var(--primary)] text-sm font-extrabold text-[var(--primary-foreground)]"
+                >
+                  {initials}
+                </div>
+              )}
+              <div>
+                <p class="font-bold text-[var(--primary)]">{t.name}</p>
+                <p class="text-xs uppercase tracking-wider text-[var(--muted-foreground)]">{t.role}</p>
+              </div>
+            </figcaption>
+          </figure>
+        );
+      })}
+    </div>
+  </div>
+</section>

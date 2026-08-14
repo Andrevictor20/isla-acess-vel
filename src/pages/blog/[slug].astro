@@ -1,0 +1,31 @@
+---
+import BlogPost from '@/layouts/BlogPost.astro';
+import { sanityClient, ALL_SLUGS_QUERY, POST_BY_SLUG_QUERY } from '@/lib/sanity';
+import type { SanityPost } from '@/lib/sanity';
+
+export async function getStaticPaths() {
+  try {
+    const slugs = await sanityClient.fetch<Array<{ slug: string; publishedAt: string }>>(ALL_SLUGS_QUERY);
+    return slugs.map((item) => ({
+      params: { slug: item.slug },
+    }));
+  } catch {
+    return [];
+  }
+}
+
+const { slug } = Astro.params;
+
+let post: SanityPost | null = null;
+try {
+  post = await sanityClient.fetch<SanityPost>(POST_BY_SLUG_QUERY, { slug });
+} catch {
+  post = null;
+}
+
+if (!post) {
+  return Astro.redirect('/blog', 302);
+}
+---
+
+<BlogPost post={post} />

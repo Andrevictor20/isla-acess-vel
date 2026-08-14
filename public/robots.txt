@@ -1,3 +1,9 @@
 User-agent: *
 Allow: /
-Sitemap: https://isla-acess-vel.vercel.app/sitemap.xml
+Disallow: /admin/_
+
+# Don't index Sanity Studio internals
+Disallow: /admin/intent/
+Disallow: /admin/desk/
+
+Sitemap: https://isla-acessivel.org.br/sitemap-index.xml

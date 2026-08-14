@@ -1,0 +1,156 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '@/components/astro/Header.astro';
+import Footer from '@/components/astro/Footer.astro';
+import { urlFor } from '@/lib/image';
+import { SITE } from '@/lib/constants';
+import type { SanityPost } from '@/lib/sanity';
+import { PortableText } from '@portabletext/react';
+
+export interface Props {
+  post: SanityPost;
+}
+
+const { post } = Astro.props;
+
+const title = post.seoTitle ?? post.title;
+const description = post.seoDescription ?? post.excerpt;
+const ogImage = post.mainImage
+  ? urlFor(post.mainImage)?.width(1200).height(630).fit('crop').auto('format').url() ?? `${SITE.url}/og-image.png`
+  : `${SITE.url}/og-image.png`;
+
+const publishedIso = new Date(post.publishedAt).toISOString();
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.title,
+  description: post.excerpt,
+  image: ogImage,
+  datePublished: publishedIso,
+  dateModified: publishedIso,
+  author: {
+    '@type': 'Organization',
+    name: post.authorName ?? SITE.name,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: SITE.name,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE.url}/isla-logo.jpg`,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': Astro.url.href,
+  },
+};
+
+const publishedFormatted = new Date(post.publishedAt).toLocaleDateString('pt-BR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  ogType="article"
+  jsonLd={articleJsonLd}
+>
+  <Header slot="header" />
+
+  <article class="mx-auto max-w-3xl px-4 py-20 md:px-8 md:py-28" itemscope itemtype="https://schema.org/Article">
+    <!-- Breadcrumb -->
+    <nav aria-label="Localização na hierarquia do site" class="mb-8">
+      <ol class="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
+        <li><a href="/" class="hover:text-primary transition-colors">Início</a></li>
+        <li aria-hidden="true">›</li>
+        <li><a href="/blog" class="hover:text-primary transition-colors">Blog</a></li>
+        <li aria-hidden="true">›</li>
+        <li class="text-foreground font-medium truncate max-w-[200px]" aria-current="page">{post.title}</li>
+      </ol>
+    </nav>
+
+    <!-- Category + Date -->
+    <div class="flex flex-wrap items-center gap-3 mb-5">
+      <span class="inline-flex items-center rounded-full bg-secondary/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-secondary">
+        {post.category}
+      </span>
+      <time datetime={publishedIso} class="text-sm text-muted-foreground">
+        {publishedFormatted}
+      </time>
+    </div>
+
+    <!-- Title -->
+    <h1 class="font-heading text-3xl font-extrabold leading-tight text-primary md:text-5xl" itemprop="headline">
+      {post.title}
+    </h1>
+
+    <!-- Excerpt -->
+    <p class="mt-5 text-lg text-muted-foreground leading-relaxed">
+      {post.excerpt}
+    </p>
+
+    <!-- Main image -->
+    {post.mainImage && (
+      <figure class="my-8">
+        <img
+          src={urlFor(post.mainImage)?.width(900).height(500).fit('crop').auto('format').url() ?? ''}
+          srcset={`
+            ${urlFor(post.mainImage)?.width(600).auto('format').url()} 600w,
+            ${urlFor(post.mainImage)?.width(900).auto('format').url()} 900w
+          `}
+          sizes="(max-width: 768px) 100vw, 900px"
+          alt={post.mainImage.alt ?? ''}
+          width="900"
+          height="500"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          class="w-full rounded-2xl object-cover shadow-soft"
+          itemprop="image"
+        />
+        {post.mainImage.alt && (
+          <figcaption class="mt-2 text-center text-xs text-muted-foreground">{post.mainImage.alt}</figcaption>
+        )}
+      </figure>
+    )}
+
+    <!-- Author -->
+    {post.authorName && (
+      <div class="mb-8 flex items-center gap-3 border-b border-border pb-6">
+        <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+          {post.authorName.charAt(0)}
+        </div>
+        <div>
+          <p class="text-sm font-bold text-primary" itemprop="author">{post.authorName}</p>
+          {post.authorRole && <p class="text-xs text-muted-foreground">{post.authorRole}</p>}
+        </div>
+      </div>
+    )}
+
+    <!-- Body -->
+    {post.body && (
+      <div class="prose-isla" itemprop="articleBody">
+        <PortableText value={post.body} />
+      </div>
+    )}
+
+    <!-- Back to blog -->
+    <div class="mt-12 border-t border-border pt-8">
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-secondary transition-colors"
+        aria-label="Voltar para todas as notícias"
+      >
+        ← Voltar para o Blog
+      </a>
+    </div>
+  </article>
+
+  <Footer slot="footer" />
+</BaseLayout>

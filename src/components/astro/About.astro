@@ -1,0 +1,62 @@
+---
+import { Target, Eye, Heart } from 'lucide-react';
+
+const items = [
+  {
+    icon: Target,
+    title: 'Missão',
+    text: 'Desenvolver ações e projetos em defesa dos direitos das pessoas com qualquer tipo de deficiência, mobilidade reduzida e idosos.',
+  },
+  {
+    icon: Eye,
+    title: 'Visão',
+    text: 'Ser referência em inclusão no estado do Maranhão, promovendo uma sociedade verdadeiramente acessível para todos.',
+  },
+  {
+    icon: Heart,
+    title: 'Valores',
+    text: 'Inclusão, dignidade, respeito, empatia e compromisso permanente com os direitos humanos e a cidadania.',
+  },
+];
+---
+
+<section id="sobre" class="py-20 md:py-28" aria-labelledby="about-heading">
+  <div class="mx-auto max-w-7xl px-4 md:px-8">
+    <div class="mx-auto max-w-3xl text-center animate-on-scroll">
+      <span class="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary)]">
+        Quem somos
+      </span>
+      <h2
+        id="about-heading"
+        class="mt-3 text-3xl font-extrabold text-[var(--primary)] md:text-5xl"
+        style="font-family: var(--font-heading); letter-spacing: -0.02em"
+      >
+        Construindo uma São Luís acessível para todos
+      </h2>
+      <p class="mt-5 text-base text-[var(--muted-foreground)] md:text-lg">
+        O Instituto São Luís Acessível atua há anos articulando a sociedade civil, o poder público e
+        parceiros para garantir direitos, autonomia e participação plena de pessoas com deficiência,
+        mobilidade reduzida e idosos.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-6 md:grid-cols-3">
+      {items.map((item) => (
+        <div class="group relative h-full overflow-hidden rounded-2xl border border-[var(--border)]/60 bg-[var(--card)] p-8 shadow-sm transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elegant)] animate-on-scroll">
+          <!-- Top gradient bar -->
+          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--secondary)] via-[var(--accent)] to-[var(--primary)] opacity-80"></div>
+          <!-- Left accent on hover -->
+          <div class="absolute inset-y-0 left-0 w-1 rounded-l-2xl bg-gradient-to-b from-[var(--secondary)] to-[var(--accent)] opacity-0 transition-opacity group-hover:opacity-100"></div>
+
+          <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[color-mix(in_oklab,var(--secondary)_15%,transparent)] text-[var(--secondary)] transition-colors group-hover:bg-[var(--secondary)] group-hover:text-[var(--secondary-foreground)]">
+            <item.icon class="h-7 w-7" aria-hidden="true" />
+          </div>
+          <h3 class="mt-5 text-2xl font-bold text-[var(--primary)]" style="font-family: var(--font-heading)">
+            {item.title}
+          </h3>
+          <p class="mt-3 text-[var(--muted-foreground)]">{item.text}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

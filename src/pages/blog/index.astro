@@ -1,0 +1,114 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/astro/Header.astro';
+import Footer from '@/components/astro/Footer.astro';
+import PostCard from '@/components/astro/PostCard.astro';
+import { sanityClient, ALL_POSTS_QUERY, POSTS_BY_CATEGORY_QUERY } from '@/lib/sanity';
+import type { SanityPost } from '@/lib/sanity';
+import { SITE } from '@/lib/constants';
+
+export const prerender = false;
+
+const categories = ['Institucional', 'Eventos', 'Imprensa', 'Campanhas'] as const;
+type Category = typeof categories[number];
+
+const urlCategory = Astro.url.searchParams.get('categoria') as Category | null;
+const activeCategory = categories.includes(urlCategory as Category) ? urlCategory : null;
+
+let posts: SanityPost[] = [];
+try {
+  if (activeCategory) {
+    posts = await sanityClient.fetch<SanityPost[]>(POSTS_BY_CATEGORY_QUERY, {
+      category: activeCategory,
+    });
+  } else {
+    posts = await sanityClient.fetch<SanityPost[]>(ALL_POSTS_QUERY);
+  }
+} catch {
+  posts = [];
+}
+---
+
+<BaseLayout
+  title={`Blog — Notícias | ${SITE.shortName}`}
+  description={`Acompanhe todas as notícias e atualizações do ${SITE.name} — São Luís, Maranhão.`}
+>
+  <Header slot="header" />
+
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+    <!-- Breadcrumb -->
+    <nav aria-label="Localização na hierarquia do site" class="mb-8">
+      <ol class="flex flex-wrap items-center gap-1.5 text-sm text-[var(--muted-foreground)]">
+        <li><a href="/" class="hover:text-[var(--primary)] transition-colors">Início</a></li>
+        <li aria-hidden="true">›</li>
+        <li class="text-[var(--foreground)] font-medium" aria-current="page">Blog</li>
+      </ol>
+    </nav>
+
+    <div class="mb-10">
+      <span class="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary)]">
+        Fique por dentro
+      </span>
+      <h1
+        class="mt-3 text-3xl font-extrabold text-[var(--primary)] md:text-5xl"
+        style="font-family: var(--font-heading); letter-spacing: -0.02em"
+      >
+        Notícias & Atualizações
+      </h1>
+      <p class="mt-3 text-[var(--muted-foreground)]">
+        Acompanhe nossas ações, projetos e conquistas recentes.
+      </p>
+    </div>
+
+    <!-- Category filter -->
+    <div class="mb-10 flex flex-wrap gap-2" role="navigation" aria-label="Filtro por categoria">
+      <a
+        href="/blog"
+        class={`rounded-full px-4 py-2 text-sm font-bold transition-colors ${
+          !activeCategory
+            ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
+            : 'border border-[var(--border)] text-[var(--foreground)] hover:bg-[color-mix(in_oklab,var(--secondary)_10%,transparent)]'
+        }`}
+        aria-current={!activeCategory ? 'true' : undefined}
+      >
+        Todas
+      </a>
+      {categories.map((cat) => (
+        <a
+          href={`/blog?categoria=${cat}`}
+          class={`rounded-full px-4 py-2 text-sm font-bold transition-colors ${
+            activeCategory === cat
+              ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
+              : 'border border-[var(--border)] text-[var(--foreground)] hover:bg-[color-mix(in_oklab,var(--secondary)_10%,transparent)]'
+          }`}
+          aria-current={activeCategory === cat ? 'true' : undefined}
+        >
+          {cat}
+        </a>
+      ))}
+    </div>
+
+    <!-- Posts grid -->
+    {posts.length > 0 ? (
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => <PostCard post={post} />)}
+      </div>
+    ) : (
+      <div class="flex flex-col items-center justify-center gap-4 py-20 text-center">
+        <p class="text-xl font-bold text-[var(--primary)]" style="font-family: var(--font-heading)">
+          {activeCategory ? `Nenhuma notícia em "${activeCategory}" ainda.` : 'Nenhuma notícia publicada ainda.'}
+        </p>
+        <p class="text-[var(--muted-foreground)]">
+          Em breve teremos novidades. Acompanhe nossas redes sociais!
+        </p>
+        {activeCategory && (
+          <a href="/blog" class="mt-2 font-semibold text-[var(--secondary)] underline underline-offset-4">
+            Ver todas as categorias
+          </a>
+        )}
+      </div>
+    )}
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>

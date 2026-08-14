@@ -1,0 +1,29 @@
+---
+import ContactForm from '@/components/react/ContactForm';
+---
+
+<section
+  id="contato"
+  class="bg-gradient-to-br from-[color-mix(in_oklab,var(--primary)_5%,transparent)] via-[var(--background)] to-[color-mix(in_oklab,var(--secondary)_5%,transparent)] py-20 md:py-28"
+  aria-labelledby="contact-heading"
+>
+  <div class="mx-auto max-w-5xl px-4 md:px-8">
+    <div class="text-center">
+      <span class="text-xs font-bold uppercase tracking-[0.2em] text-[var(--secondary)]">
+        Fale conosco
+      </span>
+      <h2
+        id="contact-heading"
+        class="mt-3 text-3xl font-extrabold text-[var(--primary)] md:text-5xl"
+        style="font-family: var(--font-heading); letter-spacing: -0.02em"
+      >
+        Envie sua mensagem
+      </h2>
+      <p class="mt-4 text-[var(--muted-foreground)]">
+        Tire dúvidas, proponha parcerias ou registre denúncias. Respondemos com cuidado e prioridade.
+      </p>
+    </div>
+
+    <ContactForm client:visible />
+  </div>
+</section>

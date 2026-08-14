@@ -1,0 +1,27 @@
+{
+  "name": "isla-studio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "deploy-graphql": "sanity graphql deploy"
+  },
+  "dependencies": {
+    "sanity": "^3.53.0",
+    "styled-components": "^6.1.13",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@sanity/icons": "^3.3.1",
+    "@sanity/ui": "^2.1.6",
+    "@sanity/vision": "^3.53.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.5.4"
+  }
+}

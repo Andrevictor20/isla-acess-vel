@@ -1,0 +1,45 @@
+---
+export const prerender = true;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/astro/Header.astro';
+import Footer from '@/components/astro/Footer.astro';
+import Hero from '@/components/astro/Hero.astro';
+import About from '@/components/astro/About.astro';
+import Services from '@/components/astro/Services.astro';
+import Impact from '@/components/astro/Impact.astro';
+import Testimonials from '@/components/astro/Testimonials.astro';
+import Partners from '@/components/astro/Partners.astro';
+import NewsPreview from '@/components/astro/NewsPreview.astro';
+import Map from '@/components/astro/Map.astro';
+import ContactSection from '@/components/astro/ContactSection.astro';
+import { sanityClient, SITE_SETTINGS_QUERY } from '@/lib/sanity';
+import type { SiteSettings } from '@/lib/sanity';
+import { SITE } from '@/lib/constants';
+
+let settings: SiteSettings | null = null;
+try {
+  settings = await sanityClient.fetch<SiteSettings>(SITE_SETTINGS_QUERY);
+} catch {
+  // Sanity not configured yet
+}
+---
+
+<BaseLayout
+  title={`${SITE.name} — ${SITE.slogan}`}
+  description={SITE.description}
+>
+  <Header slot="header" isHome={true} />
+
+  <Hero />
+  <About />
+  <Services />
+  <Impact settings={settings} />
+  <Testimonials settings={settings} />
+  <Partners settings={settings} />
+  <NewsPreview />
+  <Map />
+  <ContactSection />
+
+  <Footer slot="footer" />
+</BaseLayout>

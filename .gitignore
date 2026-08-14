@@ -28,5 +28,22 @@ dist-ssr
 *.suo
 *.ntvs*
 *.njsproj
+
+# Astro
+.astro/
+.dev_server.pid
+
+# Vercel
+.vercel/
+
+# Env — NUNCA commitar segredos!
+.env
+.env.local
+.env.production
+
+# Sanity Studio build & deps
+studio/node_modules/
+studio/dist/
+studio/.sanity/
 *.sln
 *.sw?

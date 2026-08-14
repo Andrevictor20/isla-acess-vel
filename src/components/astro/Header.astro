@@ -1,0 +1,141 @@
+---
+import { Phone, Instagram, Facebook, Youtube } from 'lucide-react';
+import { NAV_LINKS, NAV_LINKS_HOME, SITE, CONTACT, SOCIAL } from '@/lib/constants';
+import MobileNav from '@/components/react/MobileNav';
+
+export interface Props {
+  isHome?: boolean;
+}
+
+const { isHome = false } = Astro.props;
+const navLinks = isHome ? NAV_LINKS_HOME : NAV_LINKS;
+---
+
+<header class="fixed inset-x-0 top-0 z-50">
+  <!-- Top bar: phone + socials -->
+  <div class="hidden sm:block bg-[var(--primary)] text-[var(--primary-foreground)]">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 text-xs md:px-8">
+      <a
+        href={`tel:${CONTACT.phone}`}
+        class="inline-flex items-center gap-2 font-semibold hover:text-[var(--accent)]"
+        aria-label={`Ligar para ${CONTACT.phone}`}
+      >
+        <Phone class="h-3.5 w-3.5" aria-hidden="true" />
+        <span>{CONTACT.phone}</span>
+      </a>
+      <ul class="flex items-center gap-1">
+        <li>
+          <a
+            href={SOCIAL.instagram}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="Instagram do ISLA"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-white/10 hover:text-[var(--accent)]"
+          >
+            <Instagram class="h-4 w-4" aria-hidden="true" />
+          </a>
+        </li>
+        <li>
+          <a
+            href={SOCIAL.facebook}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="Facebook do ISLA"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-white/10 hover:text-[var(--accent)]"
+          >
+            <Facebook class="h-4 w-4" aria-hidden="true" />
+          </a>
+        </li>
+        <li>
+          <a
+            href={SOCIAL.youtube}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="YouTube do ISLA"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-white/10 hover:text-[var(--accent)]"
+          >
+            <Youtube class="h-4 w-4" aria-hidden="true" />
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main nav bar -->
+  <div
+    class="border-b border-[var(--border)]/50 bg-[var(--background)]/80 backdrop-blur-md transition-shadow duration-300"
+    id="main-header-bar"
+  >
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-8">
+      <!-- Logo -->
+      <a
+        href={isHome ? '#top' : '/'}
+        id="site-logo-link"
+        class="flex items-center gap-3"
+        aria-label={`${SITE.name} — Início`}
+      >
+        <img
+          src="/isla-logo.jpg"
+          alt={`Logo do ${SITE.name}`}
+          loading="eager"
+          decoding="async"
+          width="44"
+          height="44"
+          class="h-11 w-11 rounded-full object-cover ring-2 ring-[color-mix(in_oklab,var(--secondary)_30%,transparent)]"
+        />
+        <div class="hidden flex-col leading-tight sm:flex">
+          <span class="text-sm font-extrabold text-[var(--primary)]" style="font-family: var(--font-heading)">
+            {SITE.shortName}
+          </span>
+          <span class="text-[11px] text-[var(--muted-foreground)]">{SITE.slogan}</span>
+        </div>
+      </a>
+
+      <!-- Desktop nav -->
+      <nav aria-label="Navegação principal" class="hidden lg:block">
+        <ul class="flex items-center gap-1">
+          {navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="inline-flex min-h-11 items-center rounded-md px-4 text-sm font-semibold text-[var(--foreground)]/80 transition-colors hover:bg-[color-mix(in_oklab,var(--secondary)_10%,transparent)] hover:text-[var(--primary)]"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <!-- Desktop CTA -->
+      <div class="hidden lg:flex items-center gap-3">
+        <a
+          href={isHome ? '#contato' : '/#contato'}
+          id="header-cta"
+          class="inline-flex min-h-11 items-center rounded-full bg-[var(--accent)] px-5 text-sm font-bold text-[var(--accent-foreground)] transition-colors hover:bg-[color-mix(in_oklab,var(--accent)_85%,black)]"
+        >
+          Entre em Contato
+        </a>
+      </div>
+
+      <!-- Mobile hamburger island -->
+      <MobileNav client:load navLinks={navLinks} isHome={isHome} />
+    </div>
+  </div>
+</header>
+
+<!-- Scroll shadow effect -->
+<script>
+  const bar = document.getElementById('main-header-bar');
+  if (bar) {
+    const onScroll = () => {
+      if (window.scrollY > 8) {
+        bar.style.boxShadow = '0 2px 20px -10px rgba(27,44,107,0.25)';
+      } else {
+        bar.style.boxShadow = '';
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+</script>
